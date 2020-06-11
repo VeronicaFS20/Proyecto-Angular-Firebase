@@ -1,0 +1,56 @@
+<nav
+  *ngIf="authFire.user | async as user; else login"
+  class="navbar navbar-expand-lg navbar-light bg-light"
+>
+  <a class="navbar-brand" routerLink="/">LOGO</a>
+
+  <div class="collapse navbar-collapse" id="navbarNav">
+    <ul class="navbar-nav">
+      <li class="nav-item">
+        <a routerLink="/" class="nav-link">Home</a>
+      </li>
+      <li class="nav-item">
+        <a routerLink="settings" class="nav-link">Settings</a>
+      </li>
+      <li class="nav-item">
+        <a routerLink="users" class="nav-link">Users</a>
+      </li>
+    </ul>
+  </div>
+
+  <div class="userDiv">
+    {{ user.email }}
+    <button (click)="authFire.logout()"></button>
+  </div>
+</nav>
+
+<ng-template #login>
+  <div class="loginDiv">
+    <form class="form">
+      <input class="form-control"
+        type="text"
+        name="email"
+        placeholder="Escribe tu email..."
+        [(ngModel)]="authFire.email"
+      />
+      <br /><br />
+
+      <input class="form-control"
+        type="password"
+        name="pass"
+        placeholder="Escribe tu contraseña..."
+        [(ngModel)]="authFire.pass"
+      />
+      <br /><br />
+
+      <button class="btn btn-primary btn-lg disabled" (click)="signEmail()">Login</button>
+      <br /><br />
+
+      <button class="btn btn-secondary btn-lg disabled" (click)="authFire.glogin()">  
+       <i class="fab fa-google"></i>
+        Google Login</button>
+    </form>
+  </div>
+</ng-template>
+
+<router-outlet *ngIf="authFire.user | async as user"></router-outlet>

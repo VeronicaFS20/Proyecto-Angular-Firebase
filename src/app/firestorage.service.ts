@@ -27,12 +27,14 @@ export class FirestorageService {
       ext = '.png';
     }
 
-    this.firestorage.upload('images/' + this.auth.authUser.uid + ext , event.target.files[0])
-    .then(result => {
-      console.log('result', result);
-    }).catch(error =>{
-      console.log('error', error);
-    });
+    const path = this.path + this.auth.authUser.uid + ext;
+    const ref = this.firestorage.ref(path);
+    this.task = this.firestorage.upload(path, event.target.files[0]);
+    this.uploadProgress = this.task.percentageChanges();
+    this.task.snapshotChanges().pipe(finalize(() => {
+      this.downloadURL = ref.getDownloadURL();
+      console.log('this.downloadURL: ', this.downloadURL);
+    })).subscribe();
 
   }
 
